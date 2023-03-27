@@ -1,0 +1,53 @@
+{
+  "name": "ac-web-shop",
+  "private": true,
+  "version": "0.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "main": "main.js",
+  "dependencies": {
+    "@commitlint/cli": "^17.5.0",
+    "@commitlint/config-conventional": "^17.4.4",
+    "@element-plus/icons-vue": "^2.0.10",
+    "axios": "^1.1.3",
+    "element-plus": "^2.2.20",
+    "js-cookie": "^3.0.1",
+    "nprogress": "^0.2.0",
+    "pinia": "^2.0.23",
+    "swiper": "7",
+    "vue": "^3.2.41",
+    "vue-router": "^4.0.13"
+  },
+  "devDependencies": {
+    "@unocss/preset-attributify": "^0.46.3",
+    "@unocss/preset-icons": "^0.46.3",
+    "@unocss/preset-uno": "^0.46.3",
+    "@vitejs/plugin-vue": "^3.2.0",
+    "cz-customizable": "^7.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^9.7.0",
+    "husky": "^8.0.3",
+    "sass": "^1.56.0",
+    "unocss": "^0.46.3",
+    "unplugin-auto-import": "^0.11.4",
+    "unplugin-vue-components": "^0.22.9",
+    "vite": "^3.2.0",
+    "vite-plugin-eslint": "^1.8.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": ".cz-config.cjs"
+    }
+  }
+}
