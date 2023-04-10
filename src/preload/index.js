@@ -14,8 +14,8 @@ const server = new WebSocket.Server({ port: 1122 }, () => {
 // 连接时
 server.on('connection', (ws) => {
   ws.on('message', (msg) => {
-    console.log('客户端传来的消息', msg.toString())
-    ws.send('客户端传过来的消息，服务端已收到!')
+    console.log(msg.toString(), JSON.parse(msg.toString()))
+    ws.send(msg.toString())
   })
 })
 // 错误异常

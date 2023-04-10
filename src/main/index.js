@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -17,6 +17,12 @@ function createWindow() {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
+  })
+
+  ipcMain.on('getPrinterList', async (event) => {
+    event
+    const list = await mainWindow.webContents.getPrintersAsync()
+    mainWindow.webContents.send('getPrinterList', list)
   })
 
   mainWindow.on('ready-to-show', () => {

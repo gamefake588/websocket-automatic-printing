@@ -1,24 +1,38 @@
 <template>
-  <Versions></Versions>
-
-  <svg class="hero-logo" viewBox="0 0 900 300">
-    <use xlink:href="./assets/icons.svg#electron" />
-  </svg>
-  <h2 class="hero-text">You've successfully created an Electron project with Vue</h2>
-  <p class="hero-tagline">Please try pressing <code>F12</code> to open the devTool</p>
+  <button @click="handlePrinter">getPrintList</button>
+  <el-select v-model="activePrint" class="m-2" placeholder="Select" size="large">
+    <el-option
+      v-for="item in printList"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value"
+    />
+  </el-select>
+  <el-button type="primary" @click="handlerPrint">print</el-button>
 </template>
 
 <script setup>
-import { onMounted, nextTick } from 'vue'
-import Versions from './components/Versions.vue'
+import { ref } from 'vue'
 
-onMounted(() => {
-  nextTick(() => {
-    setTimeout(() => {
-      console.log(window.api)
-    }, 2000)
+const printList = ref([])
+const activePrint = ref('')
+
+const handlePrinter = () => {
+  console.log('handlePrinter')
+  window.electron.ipcRenderer.send('getPrinterList')
+
+  window.electron.ipcRenderer.once('getPrinterList', (event, data) => {
+    console.log(data)
+    printList.value = data.map((_) => ({ label: _.name, value: _.name }))
+    activePrint.value = printList.value[0].value
   })
-})
+}
+handlePrinter()
+
+const handlerPrint = () => {
+  console.log('handlerPrint')
+  window.electron.ipcRenderer.send('print')
+}
 </script>
 
 <style lang="less">
