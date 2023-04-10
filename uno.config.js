@@ -1,4 +1,10 @@
-import { defineConfig, presetAttributify, presetIcons, transformerDirectives, transformerVariantGroup } from 'unocss'
+import {
+  defineConfig,
+  presetAttributify,
+  presetIcons,
+  transformerDirectives,
+  transformerVariantGroup,
+} from 'unocss'
 
 const courseColors = [
   'rose',
@@ -30,8 +36,9 @@ export default defineConfig({
     'bg-primary': 'bg-light-blue-500 dark:bg-light-blue-600/80',
     'flex-center': 'flex items-center justify-center',
     'flex-between': 'flex justify-between',
-    'flex-between': 'flex justify-between',
-    'w-primary': 'w-75rem ma-a',
+    'w-primary': 'w-100% max-w-750px ma-a h-100vh',
+    'img-auto': 'max-w-100% max-h-100% w-auto h-auto',
+    theme: 'text-#fb5656',
   },
   presets: [
     presetIcons({
@@ -60,11 +67,16 @@ export default defineConfig({
     [
       'p-safe',
       {
-        padding: 'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)',
+        padding:
+          'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)',
       },
     ],
     ['pt-safe', { 'padding-top': 'env(safe-area-inset-top)' }],
     ['pb-safe', { 'padding-bottom': 'env(safe-area-inset-bottom)' }],
   ],
-  safelist: [...courseColors.map((c) => `bg-${c}`), ...courseColors.map((c) => `bg-${c}-3`), ...courseColors.map((c) => `text-${c}-5`)],
+  safelist: [
+    ...courseColors.map((c) => `bg-${c}`),
+    ...courseColors.map((c) => `bg-${c}-3`),
+    ...courseColors.map((c) => `text-${c}-5`),
+  ],
 })
