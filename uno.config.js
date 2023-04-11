@@ -3,7 +3,7 @@ import {
   presetAttributify,
   presetIcons,
   transformerDirectives,
-  transformerVariantGroup,
+  transformerVariantGroup
 } from 'unocss'
 
 const courseColors = [
@@ -22,7 +22,7 @@ const courseColors = [
   'yellow',
   'amber',
   'orange',
-  'red',
+  'red'
 ]
 
 export default defineConfig({
@@ -38,25 +38,25 @@ export default defineConfig({
     'flex-between': 'flex justify-between',
     'w-primary': 'w-100% max-w-750px ma-a h-100vh',
     'img-auto': 'max-w-100% max-h-100% w-auto h-auto',
-    theme: 'text-#fb5656',
+    theme: 'text-#fb5656'
   },
   presets: [
     presetIcons({
       scale: 1.2,
       extraProperties: {
         display: 'inline-block',
-        'vertical-align': 'middle',
-      },
+        'vertical-align': 'middle'
+      }
     }),
     /**
      * you can add `presetAttributify()` here to enable unocss attributify mode prompt
      * although preset is not working for applet, but will generate useless css
      */
-    presetAttributify(),
+    presetAttributify()
   ],
   transformers: [
     transformerDirectives(),
-    transformerVariantGroup(),
+    transformerVariantGroup()
     // Don't change the following order
   ],
   rules: [
@@ -68,15 +68,15 @@ export default defineConfig({
       'p-safe',
       {
         padding:
-          'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)',
-      },
+          'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)'
+      }
     ],
     ['pt-safe', { 'padding-top': 'env(safe-area-inset-top)' }],
-    ['pb-safe', { 'padding-bottom': 'env(safe-area-inset-bottom)' }],
+    ['pb-safe', { 'padding-bottom': 'env(safe-area-inset-bottom)' }]
   ],
   safelist: [
     ...courseColors.map((c) => `bg-${c}`),
     ...courseColors.map((c) => `bg-${c}-3`),
-    ...courseColors.map((c) => `text-${c}-5`),
-  ],
+    ...courseColors.map((c) => `text-${c}-5`)
+  ]
 })

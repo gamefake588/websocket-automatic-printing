@@ -20,8 +20,10 @@
     "@electron-toolkit/preload": "^1.0.3",
     "@electron-toolkit/utils": "^1.0.2",
     "@unocss/preset-uno": "^0.51.2",
+    "electron-localstorage": "^1.0.5",
     "electron-updater": "^5.3.0",
     "element-plus": "^2.3.3",
+    "vue-router": "^4.1.6",
     "ws": "^8.13.0"
   },
   "devDependencies": {

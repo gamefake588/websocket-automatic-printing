@@ -5,7 +5,8 @@ import { electronAPI } from '@electron-toolkit/preload'
 const fs = require('fs')
 const os = require('os')
 const WebSocket = require('ws')
-const api = { fs, os, WebSocket }
+const storage = require('electron-localstorage')
+const api = { fs, os, WebSocket, storage }
 
 const server = new WebSocket.Server({ port: 1122 }, () => {
   console.log('websocket服务器正在监听1122端口')
