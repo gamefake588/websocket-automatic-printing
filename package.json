@@ -1,5 +1,5 @@
 {
-  "name": "electron-vite-app",
+  "name": "websocket-automatic-printing",
   "version": "1.0.0",
   "description": "An Electron application with Vue",
   "main": "./out/main/index.js",
@@ -20,6 +20,7 @@
     "@electron-toolkit/preload": "^1.0.3",
     "@electron-toolkit/utils": "^1.0.2",
     "@unocss/preset-uno": "^0.51.2",
+    "dayjs": "^1.11.7",
     "electron-localstorage": "^1.0.5",
     "electron-updater": "^5.3.0",
     "element-plus": "^2.3.3",

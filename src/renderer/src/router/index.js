@@ -13,6 +13,7 @@ const routes = [
     path: '/print',
     name: 'print',
     component: () => import('../views/print.vue'),
+    hidden: true,
     meta: {
       title: ''
     }
@@ -20,6 +21,7 @@ const routes = [
 ]
 
 const router = createRouter({
+  base: './',
   history: createWebHashHistory(),
   routes
 })

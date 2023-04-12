@@ -1,5 +1,6 @@
 <template>
   <!-- 必须要，不可省略 -->
+  1
   <router-view></router-view>
 </template>
 

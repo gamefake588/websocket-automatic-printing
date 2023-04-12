@@ -1,16 +1,19 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
+import { join, basename } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import handlerPrint from './print'
+
+const WebSocket = require('ws')
+
+// socket
+let server
 
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 750,
-    height: 500,
-    x: 0,
-    y: 300,
+    height: 600,
     show: false,
     nodeIntegration: true, //允许渲染进程使用node.js
     contextIsolation: false, //允许渲染进程使用node.js
@@ -23,20 +26,106 @@ function createWindow() {
   })
 
   // 获取打印机列表
+  const getPrinterList = async () => {
+    return await mainWindow.webContents.getPrintersAsync()
+  }
+
+  // * socket
+
+  // 打开socket
+  ipcMain.on('openSocket', async (e, port = 12346) => {
+    if (server) {
+      mainWindow.webContents.send('getSocketLog', 'websocket已经链接')
+      return
+    }
+
+    server = new WebSocket.Server({ port: port }, () => {
+      console.log(`websocket服务器正在监听${port}端口`)
+      mainWindow.webContents.send('getSocketLog', `websocket服务器正在监听${port}端口`)
+    })
+
+    // 连接时
+    server.on('connection', (ws, req) => {
+      const ip = req.socket.remoteAddress
+      const port = req.socket.remotePort
+      const clientName = `${ip}:${port}`
+      mainWindow.webContents.send('getSocketLog', `connection:${clientName}`)
+
+      // 消息处理
+      ws.on('message', async (msg) => {
+        mainWindow.webContents.send('getSocketLog', `发送过来的消息:${msg.toString()}`)
+
+        let reqData = JSON.parse(msg.toString())
+        let resData = {}
+
+        if (reqData.method === 'printreport') {
+          handlerPrint(
+            {
+              option: {
+                silent: true,
+                deviceName: reqData.PrinterName,
+                printBackground: true,
+                margins: {
+                  marginType: 'none'
+                },
+                scaleFactor: 80
+              },
+              data: {
+                orderDetail: reqData.data
+              }
+            },
+            mainWindow
+          )
+          resData.method = 'printreport'
+          resData.data = '打印成功'
+        } else if (reqData.method === 'getprinterlist') {
+          const list = await getPrinterList()
+          resData.method = 'getprinterlist'
+          resData.data = list
+        }
+
+        resData = JSON.stringify(resData)
+        ws.send(resData)
+        mainWindow.webContents.send('getSocketLog', `返回客户端的消息:${resData}`)
+      })
+    })
+
+    // 错误异常
+    server.on('error', (err) => {
+      console.error('Socket错误:', err.message)
+
+      mainWindow.webContents.send('getSocketLog', `Socket错误:${err.message}`)
+    })
+
+    // 服务器关闭事件监听
+    server.on('close', () => {
+      console.log('Socket关闭!')
+      mainWindow.webContents.send('getSocketLog', `Socket关闭`)
+    })
+  })
+
+  // 关闭socket
+  ipcMain.on('closeSocket', async () => {
+    server?.close()
+    server = null
+  })
+
+  // * print
+
+  // 获取打印机列表
   ipcMain.on('getPrinterList', async (event) => {
     event
-    const list = await mainWindow.webContents.getPrintersAsync()
+    const list = await getPrinterList()
     mainWindow.webContents.send('getPrinterList', list)
   })
 
   // 调用打印机打印
   ipcMain.handle('printHandlePrint', async (event, params) => {
     handlerPrint(JSON.parse(params), mainWindow)
-    mainWindow.webContents.send('getPrinterData', 'params.data.orderDetail')
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+    if (process.argv.indexOf('--openAsHidden') < 0) mainWindow.show()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -52,6 +141,19 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
+
+function onAppReady() {
+  // 设置开机自起
+  const exeName = basename(process.execPath)
+  app.setLoginItemSettings({
+    // 设置为true注册开机自起
+    openAtLogin: true,
+    openAsHidden: true, //macOs
+    path: process.execPath,
+    args: ['--processStart', `"${exeName}"`, '--openAsHidden']
+  })
+}
+app.isReady() ? onAppReady() : app.on('ready', onAppReady)
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

@@ -8,6 +8,7 @@ specifiers:
   '@unocss/preset-uno': ^0.51.2
   '@vitejs/plugin-vue': ^4.1.0
   '@vue/eslint-config-prettier': ^7.1.0
+  dayjs: ^1.11.7
   electron: ^22.3.4
   electron-builder: ^23.6.0
   electron-localstorage: ^1.0.5
@@ -28,6 +29,7 @@ dependencies:
   '@electron-toolkit/preload': registry.npmmirror.com/@electron-toolkit/preload/1.0.3_electron@22.3.5
   '@electron-toolkit/utils': registry.npmmirror.com/@electron-toolkit/utils/1.0.2_electron@22.3.5
   '@unocss/preset-uno': registry.npmmirror.com/@unocss/preset-uno/0.51.2
+  dayjs: registry.npmmirror.com/dayjs/1.11.7
   electron-localstorage: registry.npmmirror.com/electron-localstorage/1.0.5
   electron-updater: registry.npmmirror.com/electron-updater/5.3.0
   element-plus: registry.npmmirror.com/element-plus/2.3.3_vue@3.2.47
