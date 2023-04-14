@@ -5,13 +5,13 @@ import { format as formatUrl } from 'url'
 function createPrintWindow(params) {
   // 实例化一个窗口出来
   let printWindow = new BrowserWindow({
-    width: 1200,
-    height: 1000,
+    width: 200,
+    height: 400,
     frame: true,
     skipTaskbar: true,
-    transparent: false,
+    transparent: true,
     resizable: false,
-    show: true, //不要让窗口显示出来
+    show: false, //不要让窗口显示出来
     nodeIntegration: true, //允许渲染进程使用node.js
     contextIsolation: false, //允许渲染进程使用node.js
     webPreferences: {
@@ -30,21 +30,15 @@ function createPrintWindow(params) {
   // 加载主页面
   // printWindow.loadURL(`${winURL}#/print`)
 
+  // 让窗口去加载webPage里面的某个路由
   printWindow.loadURL(
     formatUrl({
-      pathname: join(__dirname, 'index.html'),
+      pathname: join(__dirname, '../renderer/index.html'),
       protocol: 'file',
       slashes: true,
       hash: 'print'
     })
   )
-
-  // 打开控制台
-  printWindow.webContents.openDevTools()
-  setTimeout(() => {
-    printWindow.webContents.send('getPrinterData', params.data.orderDetail)
-  }, 300)
-  return
 
   // // 让窗口去加载webPage里面的某个路由
   // printWindow.loadURL(`${winURL}#/print`)

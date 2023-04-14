@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
 import { join, basename } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -8,10 +8,11 @@ const WebSocket = require('ws')
 
 // socket
 let server
+let tray = null
 
 function createWindow() {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  let mainWindow = new BrowserWindow({
     width: 750,
     height: 600,
     show: false,
@@ -122,6 +123,52 @@ function createWindow() {
   // 调用打印机打印
   ipcMain.handle('printHandlePrint', async (event, params) => {
     handlerPrint(JSON.parse(params), mainWindow)
+  })
+
+  // * 最小化
+  // 窗口关闭的监听
+  mainWindow.on('closed', () => {
+    mainWindow = null
+  })
+  // 触发关闭时触发
+  mainWindow.on('close', (event) => {
+    // 截获 close 默认行为
+    event.preventDefault()
+    // 点击关闭时触发close事件，我们按照之前的思路在关闭时，隐藏窗口，隐藏任务栏窗口
+    mainWindow.hide()
+    mainWindow.setSkipTaskbar(true)
+  })
+  // 触发显示时触发
+  mainWindow.on('show', () => {})
+  // 触发隐藏时触发
+  mainWindow.on('hide', () => {})
+
+  // 新建托盘
+  tray = new Tray(icon)
+  // 托盘名称
+  tray.setToolTip('websocket-自动打印小票插件')
+  // 托盘菜单
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '显示',
+      click: () => {
+        mainWindow.show()
+      }
+    },
+    {
+      label: '退出',
+      click: () => {
+        mainWindow.destroy()
+      }
+    }
+  ])
+  // 载入托盘菜单
+  tray.setContextMenu(contextMenu)
+  // 双击触发
+  tray.on('double-click', () => {
+    // 双击通知区图标实现应用的显示或隐藏
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+    mainWindow.isVisible() ? mainWindow.setSkipTaskbar(false) : mainWindow.setSkipTaskbar(true)
   })
 
   mainWindow.on('ready-to-show', () => {
