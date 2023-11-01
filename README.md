@@ -49,6 +49,8 @@ state.socket.send(JSON.stringify(msg));
 
 <img src="./test.png" />
 
+<img src="./test2.png" />
+
 ## Recommended IDE Setup
 
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
